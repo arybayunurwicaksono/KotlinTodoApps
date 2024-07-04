@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TodoApps</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="due_date">Due Date</string>
+    <string name="add_todo">Add todo</string>
 </resources>

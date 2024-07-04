@@ -1,23 +1,12 @@
 package com.dguitarclassic.todoapps.repo
 
-import android.app.Application
-import androidx.lifecycle.LiveData
-import com.dguitarclassic.todoapps.db.TodoDao
 import com.dguitarclassic.todoapps.model.Todo
-import com.dguitarclassic.todoapps.model.TodoDB
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class TodoRepo @Inject constructor(application: Application) {
+interface TodoRepo {
+    fun GetAllTodo(): Flow<List<Todo>>
 
-    private val todoDao: TodoDao
+    suspend fun insert(todo: Todo)
 
-    init {
-        val db = TodoDB.getDatabase(application)
-        todoDao = db.todoDao()
-    }
-
-    fun getAllTodo() : LiveData<List<Todo>> = todoDao.getAllTodo()
-
-    fun addTodo(todo: Todo) = todoDao.addTodo(todo)
-
+    fun delete(id: Int)
 }

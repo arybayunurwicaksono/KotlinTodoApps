@@ -6,4 +6,8 @@
     <color name="light_green_600">#2A9803</color>
     <color name="light_green_400">#68E43B</color>
     <color name="light_green_200">#AAFF8B</color>
+    <color name="grey">#525352</color>
+    <color name="light_grey">#E4E4E4</color>
+
+
 </resources>
