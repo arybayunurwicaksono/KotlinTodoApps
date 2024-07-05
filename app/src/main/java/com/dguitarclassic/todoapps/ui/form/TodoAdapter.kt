@@ -1,4 +1,4 @@
-package com.dguitarclassic.todoapps
+package com.dguitarclassic.todoapps.ui.form
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dguitarclassic.todoapps.databinding.ItemRowTodoBinding
 import com.dguitarclassic.todoapps.model.Todo
 
-class TodoAdapter(private var todoList: List<Todo>) :
+class TodoAdapter(private var todoList: List<Todo>, private val onItemClick: (Todo) -> Unit) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     inner class TodoViewHolder(val binding: ItemRowTodoBinding) :
@@ -22,17 +22,12 @@ class TodoAdapter(private var todoList: List<Todo>) :
         holder.binding.todoTitle.text = "${listTodo.id} : ${listTodo.title}"
         holder.binding.todoDesc.text = listTodo.desc
         holder.binding.todoDue.text = listTodo.due
+        holder.binding.root.setOnClickListener {
+            onItemClick(listTodo)
+        }
     }
 
 
     override fun getItemCount(): Int = todoList.size
-
-
-    fun setTodoData(postList: List<Todo>) {
-
-        this.todoList = postList
-        notifyDataSetChanged()
-
-    }
 
 }

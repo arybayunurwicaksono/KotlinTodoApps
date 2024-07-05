@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAllTodoUsecase @Inject constructor(private val repository: TodoRepo) {
-    operator fun invoke(): Flow<List<Todo>> = repository.GetAllTodo()
+    operator fun invoke(): Flow<List<Todo>> = repository.getAllTodo()
 }
 

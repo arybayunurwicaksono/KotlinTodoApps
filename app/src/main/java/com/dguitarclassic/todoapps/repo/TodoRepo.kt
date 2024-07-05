@@ -4,9 +4,8 @@ import com.dguitarclassic.todoapps.model.Todo
 import kotlinx.coroutines.flow.Flow
 
 interface TodoRepo {
-    fun GetAllTodo(): Flow<List<Todo>>
-
+    fun getAllTodo(): Flow<List<Todo>>
     suspend fun insert(todo: Todo)
-
-    fun delete(id: Int)
+    suspend fun update(todo: Todo)
+    suspend fun delete(todo: Todo)
 }

@@ -1,6 +1,6 @@
 package com.dguitarclassic.todoapps
 
-import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.dguitarclassic.todoapps.db.TodoDao
 import com.dguitarclassic.todoapps.model.TodoDB
@@ -9,6 +9,7 @@ import com.dguitarclassic.todoapps.repo.TodoRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -18,8 +19,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(app: Application): TodoDB {
-        return Room.databaseBuilder(app, TodoDB::class.java, "todoDB")
+    fun provideDatabase(@ApplicationContext context: Context): TodoDB {
+        return Room.databaseBuilder(context, TodoDB::class.java, "todoDB")
             .fallbackToDestructiveMigration()
             .build()
     }

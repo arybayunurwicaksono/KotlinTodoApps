@@ -7,10 +7,11 @@ import javax.inject.Inject
 
 class TodoRepoImpl @Inject constructor(
     private val todoDao: TodoDao
-) : TodoRepo{
-    override fun GetAllTodo(): Flow<List<Todo>> = todoDao.getAllToDos()
+) : TodoRepo {
+    override fun getAllTodo(): Flow<List<Todo>> = todoDao.getAllToDos()
 
     override suspend fun insert(todo: Todo) = todoDao.insert(todo)
+    override suspend fun update(todo: Todo) = todoDao.update(todo)
 
-    override fun delete(id: Int) = todoDao.delete(id)
+    override suspend fun delete(todo: Todo) = todoDao.delete(todo)
 }

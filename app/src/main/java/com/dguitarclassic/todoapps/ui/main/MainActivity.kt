@@ -1,15 +1,15 @@
-package com.dguitarclassic.todoapps.ui
+package com.dguitarclassic.todoapps.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dguitarclassic.todoapps.TodoAdapter
-import com.dguitarclassic.todoapps.TodoFormActivity
-import com.dguitarclassic.todoapps.TodoViewModel
+import com.dguitarclassic.todoapps.AppConst
+import com.dguitarclassic.todoapps.ui.form.TodoAdapter
+import com.dguitarclassic.todoapps.ui.form.TodoFormActivity
+import com.dguitarclassic.todoapps.viewModel.TodoViewModel
 import com.dguitarclassic.todoapps.databinding.ActivityMainBinding
 import com.dguitarclassic.todoapps.model.Todo
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TodoViewModel by viewModels()
-    lateinit var todoList: List<Todo>
+    private val onItemClick: (Todo) -> Unit = { toDo ->
+        val intent = Intent(this, TodoFormActivity::class.java).apply {
+            putExtra(AppConst.TODO, toDo)
+        }
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,16 +43,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setRecyclerView() {
         binding.rvTodo.layoutManager = LinearLayoutManager(this)
-        binding.rvTodo.setHasFixedSize(true)
         lifecycleScope.launch {
             viewModel.allTodo.collect { data ->
-                try {
-                    val adapter = TodoAdapter(data)
-                    binding.rvTodo.adapter = adapter
-                    adapter.setTodoData(todoList)
-                } catch (e: Exception) {
-                    Log.e("hiltTesting", "$e")
-                }
+                binding.rvTodo.adapter = TodoAdapter(data, onItemClick)
             }
         }
     }

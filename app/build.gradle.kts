@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
 }
 
@@ -42,9 +43,9 @@ android {
 
 dependencies {
 
-    var hilt_version = "2.44"
-    var room_version = "2.6.1"
-    var lifecycle_version = "2.8.2"
+    val hilt_version = "2.44"
+    val room_version = "2.6.1"
+    val lifecycle_version = "2.8.2"
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -70,6 +71,8 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+
+    implementation ("com.github.f0ris.sweetalert:library:1.6.2")
 
 }
 

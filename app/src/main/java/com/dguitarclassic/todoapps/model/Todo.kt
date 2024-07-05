@@ -1,9 +1,12 @@
 package com.dguitarclassic.todoapps.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "todo")
 data class Todo(
     @PrimaryKey(autoGenerate = true)
@@ -15,4 +18,4 @@ data class Todo(
     val desc: String,
     @ColumnInfo(name = "due")
     val due: String
-)
+) : Parcelable
