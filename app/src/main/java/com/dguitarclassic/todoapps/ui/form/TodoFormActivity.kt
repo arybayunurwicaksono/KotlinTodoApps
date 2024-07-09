@@ -1,7 +1,6 @@
 package com.dguitarclassic.todoapps.ui.form
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.VISIBLE
@@ -11,10 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.dguitarclassic.todoapps.AppConst
 import com.dguitarclassic.todoapps.R
-import com.dguitarclassic.todoapps.viewModel.TodoViewModel
 import com.dguitarclassic.todoapps.databinding.ActivityTodoFormBinding
 import com.dguitarclassic.todoapps.model.Todo
-import com.dguitarclassic.todoapps.ui.main.MainActivity
+import com.dguitarclassic.todoapps.viewModel.TodoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -71,13 +69,12 @@ class TodoFormActivity : AppCompatActivity() {
             if (dataTodo != null) {
                 lifecycleScope.launch {
                     viewModel.update(dataTodo.id, title, desc, due)
+                    finish()
                 }
             } else {
-                lifecycleScope.launch {
-                    viewModel.insert(title, desc, due)
-                }
+                viewModel.insert(title, desc, due)
+                finish()
             }
-            goToMainActivity()
         }
         binding.edTodoDue.setOnClickListener {
             showDatePickerDialog(it)
@@ -92,8 +89,8 @@ class TodoFormActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         if (dataTodo != null) {
                             viewModel.delete(dataTodo)
+                            finish()
                         }
-                        goToMainActivity()
                     }
                 }
                 .setCancelButtonBackgroundColor(R.color.light_green)
@@ -104,14 +101,6 @@ class TodoFormActivity : AppCompatActivity() {
                 .show()
         }
 
-    }
-
-    private fun goToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish()
     }
 
     private fun getCurrentDate(): String {

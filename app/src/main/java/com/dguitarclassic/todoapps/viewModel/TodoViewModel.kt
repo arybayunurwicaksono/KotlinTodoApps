@@ -1,5 +1,7 @@
 package com.dguitarclassic.todoapps.viewModel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dguitarclassic.todoapps.domain.usecase.AddTodoUseCase
@@ -8,9 +10,6 @@ import com.dguitarclassic.todoapps.domain.usecase.GetAllTodoUsecase
 import com.dguitarclassic.todoapps.domain.usecase.UpdateTodoUseCase
 import com.dguitarclassic.todoapps.model.Todo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,10 +21,18 @@ class TodoViewModel @Inject constructor(
     private val deleteTodoUseCase: DeleteTodoUseCase
 ) : ViewModel() {
 
-    val allTodo: StateFlow<List<Todo>> = getAllTodoUsecase()
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    private val _allToDos = MutableLiveData<List<Todo>>()
+    val allToDos: LiveData<List<Todo>> get() = _allToDos
 
-    suspend fun insert(title: String, desc: String, due: String) {
+    init {
+        viewModelScope.launch {
+            getAllTodoUsecase().collect { todos ->
+                _allToDos.value = todos
+            }
+        }
+    }
+
+    fun insert(title: String, desc: String, due: String) {
         viewModelScope.launch {
             addTodoUseCase(
                 Todo(
@@ -39,16 +46,14 @@ class TodoViewModel @Inject constructor(
     }
 
     suspend fun update(id: Int, title: String, desc: String, due: String) {
-        viewModelScope.launch {
-            updateTodoUseCase(
-                Todo(
-                    id = id,
-                    title = title,
-                    desc = desc,
-                    due = due
-                )
+        updateTodoUseCase(
+            Todo(
+                id = id,
+                title = title,
+                desc = desc,
+                due = due
             )
-        }
+        )
     }
 
     suspend fun delete(todo: Todo) {
