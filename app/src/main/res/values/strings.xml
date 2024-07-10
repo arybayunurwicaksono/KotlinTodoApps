@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TodoApps</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="due_date">Due Date</string>
+    <string name="add_todo">Add todo</string>
+    <string name="title_is_empty">Title is empty</string>
+    <string name="description_is_empty">Description is empty</string>
+    <string name="due_date_is_empty">Due date is empty</string>
+    <string name="update">Update</string>
+    <string name="are_you_sure_want_to_delete_this_todo">Are you sure want to delete this todo?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
