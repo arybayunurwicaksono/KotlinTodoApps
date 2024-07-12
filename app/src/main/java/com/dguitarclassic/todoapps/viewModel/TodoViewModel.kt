@@ -45,18 +45,20 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    suspend fun update(id: Int, title: String, desc: String, due: String) {
-        updateTodoUseCase(
-            Todo(
-                id = id,
-                title = title,
-                desc = desc,
-                due = due
+    fun update(id: Int, title: String, desc: String, due: String) {
+        viewModelScope.launch {
+            updateTodoUseCase(
+                Todo(
+                    id = id,
+                    title = title,
+                    desc = desc,
+                    due = due
+                )
             )
-        )
+        }
     }
 
-    suspend fun delete(todo: Todo) {
+    fun delete(todo: Todo) {
         viewModelScope.launch {
             deleteTodoUseCase(todo)
         }

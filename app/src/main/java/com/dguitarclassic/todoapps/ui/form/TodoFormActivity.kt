@@ -25,7 +25,6 @@ class TodoFormActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTodoFormBinding
     private val viewModel: TodoViewModel by viewModels()
-    private var todo: Todo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +66,8 @@ class TodoFormActivity : AppCompatActivity() {
             }
 
             if (dataTodo != null) {
-                lifecycleScope.launch {
-                    viewModel.update(dataTodo.id, title, desc, due)
-                    finish()
-                }
+                viewModel.update(dataTodo.id, title, desc, due)
+                finish()
             } else {
                 viewModel.insert(title, desc, due)
                 finish()

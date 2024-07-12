@@ -21,7 +21,6 @@ class TodoRepoImpl @Inject constructor(
     override suspend fun update(todo: Todo) {
         withContext(Dispatchers.IO) {
             todoDao.update(todo)
-
         }
     }
 
