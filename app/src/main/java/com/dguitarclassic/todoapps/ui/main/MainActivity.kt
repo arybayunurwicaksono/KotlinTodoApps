@@ -6,14 +6,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dguitarclassic.todoapps.AppConst
+import com.dguitarclassic.todoapps.TodoClickListener
 import com.dguitarclassic.todoapps.databinding.ActivityMainBinding
+import com.dguitarclassic.todoapps.model.Todo
 import com.dguitarclassic.todoapps.ui.form.TodoAdapter
 import com.dguitarclassic.todoapps.ui.form.TodoFormActivity
 import com.dguitarclassic.todoapps.viewModel.TodoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TodoClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TodoViewModel by viewModels()
@@ -33,12 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerView() {
-        val adapter = TodoAdapter { todo ->
-            val intent = Intent(this, TodoFormActivity::class.java).apply {
-                putExtra(AppConst.TODO, todo)
-            }
-            startActivity(intent)
-        }
+        val adapter = TodoAdapter(this)
         binding.rvTodo.adapter = adapter
         binding.rvTodo.layoutManager = LinearLayoutManager(this)
         viewModel.allToDos.observe(this) {
@@ -46,5 +43,12 @@ class MainActivity : AppCompatActivity() {
                 binding.rvTodo.scrollToPosition(0)
             }
         }
+    }
+
+    override fun onTodoClick(todo: Todo) {
+        val intent = Intent(this, TodoFormActivity::class.java).apply {
+            putExtra(AppConst.TODO, todo)
+        }
+        startActivity(intent)
     }
 }

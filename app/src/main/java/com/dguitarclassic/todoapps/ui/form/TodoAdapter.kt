@@ -5,15 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.dguitarclassic.todoapps.TodoClickListener
 import com.dguitarclassic.todoapps.databinding.ItemRowTodoBinding
 import com.dguitarclassic.todoapps.model.Todo
 
-class TodoAdapter(private val onItemClick: (Todo) -> Unit) :
+class TodoAdapter(private val onItemClick: TodoClickListener) :
     ListAdapter<Todo, TodoAdapter.TodoViewHolder>(TodoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val binding = ItemRowTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TodoViewHolder(binding)
+        val viewHolder = TodoViewHolder(binding)
+        binding.root.setOnClickListener {
+            val position = viewHolder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val toDo = getItem(position)
+                onItemClick.onTodoClick(toDo)
+            }
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
@@ -27,9 +36,6 @@ class TodoAdapter(private val onItemClick: (Todo) -> Unit) :
             binding.todoTitle.text = "${todo.id} : ${todo.title}"
             binding.todoDesc.text = todo.desc
             binding.todoDue.text = todo.due
-            binding.root.setOnClickListener {
-                onItemClick(todo)
-            }
         }
     }
 
