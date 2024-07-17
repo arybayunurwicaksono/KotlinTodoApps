@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dguitarclassic.todoapps.AppConst
+import com.dguitarclassic.todoapps.TodoClickListener
 import com.dguitarclassic.todoapps.databinding.ActivityMainBinding
 import com.dguitarclassic.todoapps.model.Todo
 import com.dguitarclassic.todoapps.ui.form.TodoAdapter
@@ -14,16 +15,10 @@ import com.dguitarclassic.todoapps.viewModel.TodoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TodoClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TodoViewModel by viewModels()
-    private val onItemClick: (Todo) -> Unit = { toDo ->
-        val intent = Intent(this, TodoFormActivity::class.java).apply {
-            putExtra(AppConst.TODO, toDo)
-        }
-        startActivity(intent)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +35,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerView() {
+        val adapter = TodoAdapter(this)
+        binding.rvTodo.adapter = adapter
         binding.rvTodo.layoutManager = LinearLayoutManager(this)
         viewModel.allToDos.observe(this) {
-            binding.rvTodo.adapter = TodoAdapter(it, onItemClick)
+            adapter.submitList(it) {
+                binding.rvTodo.scrollToPosition(0)
+            }
         }
+    }
+
+    override fun onTodoClick(todo: Todo) {
+        val intent = Intent(this, TodoFormActivity::class.java).apply {
+            putExtra(AppConst.TODO, todo)
+        }
+        startActivity(intent)
     }
 }
