@@ -14,15 +14,15 @@ class TodoAdapter(private val onItemClick: TodoClickListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val binding = ItemRowTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder = TodoViewHolder(binding)
-        binding.root.setOnClickListener {
-            val position = viewHolder.adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                val toDo = getItem(position)
-                onItemClick.onTodoClick(toDo)
+        return TodoViewHolder(binding).apply {
+            itemView.setOnClickListener {
+                val position = this.adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val todo = getItem(position)
+                    onItemClick.onTodoClick(todo)
+                }
             }
         }
-        return viewHolder
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
